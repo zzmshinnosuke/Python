@@ -77,7 +77,7 @@ class Daemon:
             if pid > 0:
                 # 退出父进程，此时linux系统的init将会接管子进程
                 sys.exit(0)
-        except OSError, e:
+        except OSError as e:
             sys.stderr.write('fork #1 failed: %d (%s)\n' % (e.errno, e.strerror))
             sys.exit(1)
  
@@ -93,7 +93,7 @@ class Daemon:
             if pid > 0:
                 # 子进程退出，孙子进程运行，此时孙子进程由init进程接管，在CentOS 7中是Systemed。
                 sys.exit(0)
-        except OSError, e:
+        except OSError as e:
             sys.stderr.write('fork #2 failed: %d (%s)\n' % (e.errno, e.strerror))
             sys.exit(1)
  
@@ -160,7 +160,7 @@ class Daemon:
                 time.sleep(0.1)
                 message = 'Process is stopped.\n'
                 sys.stderr.write(message)
-        except OSError, err:
+        except OSError as err:
             err = str(err)
             if err.find('No such process') > 0:
                 if os.path.exists(self.pidfile):
