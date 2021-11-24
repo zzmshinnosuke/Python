@@ -80,7 +80,7 @@ class Daemon:
         except OSError as e:
             sys.stderr.write('fork #1 failed: %d (%s)\n' % (e.errno, e.strerror))
             sys.exit(1)
- 
+         
         # 第二、三、四步
         os.chdir("/")  # 修改进程工作目录
         os.setsid()  # 设置新的会话，子进程会成为新会话的首进程，同时也产生一个新的进程组，该进程组ID与会话ID相同
@@ -96,25 +96,28 @@ class Daemon:
         except OSError as e:
             sys.stderr.write('fork #2 failed: %d (%s)\n' % (e.errno, e.strerror))
             sys.exit(1)
- 
+        
+        
         # 第六步
         # 把之前的刷到硬盘上
         sys.stdout.flush()
         sys.stderr.flush()
         # 重定向标准文件描述符
-        si = file(self.stdin, 'r')
-        so = file(self.stdout, 'a+')
-        se = file(self.stderr, 'a+', 0)
+        si = open(self.stdin, 'r')
+        so = open(self.stdout, 'a+')
+        se = open(self.stderr, 'a+')
+        
         # os.dup2可以原子化的打开和复制描述符，功能是复制文件描述符fd到fd2, 如果有需要首先关闭fd2. 在unix，Windows中有效。
         # File的 fileno() 方法返回一个整型的文件描述符(file descriptor FD 整型)
         os.dup2(si.fileno(), sys.stdin.fileno())
         os.dup2(so.fileno(), sys.stdout.fileno())
         os.dup2(se.fileno(), sys.stderr.fileno())
- 
+
         # 注册退出函数，根据文件pid判断是否存在进程
         atexit.register(self.delpid)
         pid = str(os.getpid())
-        file(self.pidfile, 'w+').write('%s\n' % pid)
+
+        open(self.pidfile, 'w+').write('%s\n' % pid)
  
     # 程序退出后移除PID文件
     def delpid(self):
@@ -173,7 +176,7 @@ class Daemon:
     def _getPid(self):
         try:
             # 读取保存PID的文件
-            pf = file(self.pidfile, 'r')
+            pf = open(self.pidfile, 'r')
             # 转换成整数
             pid = int(pf.read().strip())
             # 关闭文件
@@ -215,7 +218,7 @@ class Daemon:
             # print '%s:hello world\n' % (time.ctime(),)
             sys.stdout.write('%s:hello world\n' % (time.ctime(),))
             sys.stdout.flush()
-            time.sleep(2)
+#             time.sleep(2)
  
  
 if __name__ == '__main__':
