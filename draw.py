@@ -4,7 +4,7 @@ Created on Apr 17, 2018
 
 @author: zzm
 '''
-import Image
+from PIL import Image
 from matplotlib import pyplot as plt
 from matplotlib.patches import Circle
 img=Image.open('0.jpg')
