@@ -7,7 +7,7 @@ Created on Apr 17, 2018
 from PIL import Image
 from matplotlib import pyplot as plt
 from matplotlib.patches import Circle
-img=Image.open('0.jpg')
+img=Image.open('images/0.jpg')
 img_gray=img.convert("L")
 fig=plt.figure()
 
@@ -42,7 +42,7 @@ ax.imshow(img_gray,cmap="gray") #以灰度图显示
 ax.set_title("third")
 plt.axis("off") #不显示刻度
 
-plt.savefig("1.jpg") #如果放在plt.show()之后，会保存一张空图片
+plt.savefig("images/1.jpg") #如果放在plt.show()之后，会保存一张空图片
 plt.show()
 '''
 或者先获取一下当前图片的‘句柄’
